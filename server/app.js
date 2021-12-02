@@ -45,6 +45,17 @@ app.get('/landpads', async (req, res) => {
 });
 
 app.post('/landpads', async (req, res, next) => {
+    if (!req.body.id) {
+        res.status(400).send({
+            error: "Please provide landpad id."
+        });
+    }
+    else {
+        next()
+    }
+})
+
+app.post('/landpads', async (req, res, next) => {
     try {
         const landpad = await store.show(req.body.id);
         if (!!landpad) {

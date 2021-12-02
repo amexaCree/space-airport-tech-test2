@@ -1,10 +1,14 @@
 const dbPool = require('./db');
 const express = require('express');
+const axios = require('axios').default; 
+const cors = require('cors')
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+ 
+app.use(cors())
 
 app.get('/', async (req, res) => {
     const rows = await dbPool.query('SELECT * FROM spaceData');

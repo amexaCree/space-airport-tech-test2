@@ -1,58 +1,97 @@
 import React, { Component } from "react"
 import rocket from '../assets/rocket.svg';
+import * as SpacePortAPI from '../utils/SpacePortAPI'
 
 class Dashboard extends Component {
     constructor() {
         super()
         this.state = {
             result: "",
-            landingPadId: ""
+            landPadId: ""
         }
         this.handleClick = this.handleClick.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
+        this.handleChange = this.handleChange.bind(this)
     }
 
-    handleClick() {
-        fetch("http://localhost:4000/capsules")
-        .then(response => {
-            const data = response.json() 
-            console.log(data)
-            this.setState({result: JSON.stringify(data)})
+
+    displayLoading() {
+        this.setState({result: "Loading..."})
+    }
+
+    displayResult(data) {
+        const resultJSON = JSON.stringify(data, null, 4)
+        // console.log(resultJSON)
+        this.setState({result: resultJSON})
+    }
+
+    handleClick(event) {
+        this.displayLoading()
+        SpacePortAPI.GetCapsules().then((capsules) => {
+            this.displayResult(capsules)
         })
-        .catch((error) => {
-            this.setState({result: error})
+        .catch(err => {
+            console.log(err.message)
+            this.displayResult(`Error: ${err.message}`)
         })
     }
 
     handleSubmit(event) {
         event.preventDefault()
-        // if (!!this.state.landingPadId) {}
-        fetch("http://localhost:4000/capsules", {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({id: this.state.landingPadId})
+        const id = this.state.landPadId
+        this.displayLoading()
+        SpacePortAPI.GetLandPad(id).then((landpad) => {
+            this.displayResult(landpad)
         })
-        .then(response => {
-            const data = response.json() 
-            console.log(data)
-            this.setState({result: JSON.stringify(data)})
+        .catch(err => {
+            console.log(err.message)
+            this.displayResult(`Error: ${err.message}`)
         })
-        .catch((error) => {
-            this.setState({result: error})
-        })
+    }
+
+    handleChange(event) {
+        const {name, value} = event.target
+        this.setState({[name]: value})
     }
     
     render() {
         return (
             <div className="dashboard">
-                <div className="display">{this.state.result}</div>
-                <div className="controls">
-                    <button onClick={this.handleClick}>Capsule</button>
-                    <img src={rocket} className="rocket-logo" alt="rocket" />
-                    <form onSubmit={this.handleSubmit}>
-                        <input type="text" name="landPad" placeholder="Enter Landing Pad ID"/>
-                        <button>Landing Pad</button>
-                    </form>
+
+                <div className="dashboard-contents">
+
+                    <div className="display">
+                        <pre>{this.state.result}</pre>
+                    </div>
+
+                    <div className="controls">
+                        <button 
+                            className="capsule-btn"
+                            onClick={this.handleClick}
+                        >Capsules</button>
+
+                        <img 
+                            src={rocket} 
+                            className="rocket-logo" 
+                            alt="rocket" 
+                        />
+
+                        <form 
+                            className="landpad-form" 
+                            onSubmit={this.handleSubmit}
+                        >    
+                            <input 
+                                type="text" 
+                                placeholder="Enter Id..."
+                                name="landPadId"
+                                size="15" 
+                                value={this.state.landPadId} 
+                                onChange={this.handleChange}
+                            />
+
+                            <button>Landing Pad</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         );

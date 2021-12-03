@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import rocket from '../assets/rocket.svg';
 import * as SpacePortAPI from '../utils/SpacePortAPI'
+import prompt from '../utils/prompt'
 
 class Dashboard extends Component {
     constructor() {
@@ -14,6 +15,13 @@ class Dashboard extends Component {
         this.handleChange = this.handleChange.bind(this)
     }
 
+    componentDidMount(){
+        this.displayPrompt()
+    }
+
+    displayPrompt() {
+        this.setState({result: prompt})
+    }
 
     displayLoading() {
         this.setState({result: "Loading..."})
@@ -26,6 +34,12 @@ class Dashboard extends Component {
     }
 
     handleClick(event) {
+        const { className } = event.target
+        
+        if (className === "rocket-logo") {
+            return this.displayPrompt()
+        }
+
         this.displayLoading()
         SpacePortAPI.GetCapsules().then((capsules) => {
             this.displayResult(capsules)
@@ -74,6 +88,7 @@ class Dashboard extends Component {
                             src={rocket} 
                             className="rocket-logo" 
                             alt="rocket" 
+                            onClick={this.handleClick}
                         />
 
                         <form 

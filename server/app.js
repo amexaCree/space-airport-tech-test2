@@ -2,7 +2,7 @@ const dbPool = require('./db');
 const express = require('express');
 const axios = require('axios').default; 
 const cors = require('cors')
-const SpaceDataStore = require('./stores/spaceData');
+const SpaceDataStore = require('./store/spaceData');
 
 const app = express();
 
@@ -29,9 +29,7 @@ app.get('/capsules', async (req, res) => {
     } 
     catch (err) {
         res.status(500);
-        res.send({
-            error: err.message
-        });
+        res.json(err.message);
     }
     
 });
@@ -39,16 +37,12 @@ app.get('/capsules', async (req, res) => {
 app.get('/landpads', async (req, res) => {
     const rows = await dbPool.query('SELECT * FROM spaceData');
     res.status(200);
-    res.send({
-        result: JSON.stringify(rows)
-    });
+    res.json(rows);
 });
 
 app.post('/landpads', async (req, res, next) => {
     if (!req.body.id) {
-        res.status(400).send({
-            error: "Please provide landpad id."
-        });
+        res.status(400).json("Error: Please provide landing pad id.");
     }
     else {
         next()
@@ -67,11 +61,9 @@ app.post('/landpads', async (req, res, next) => {
             next()
         }
     } catch(err) {
-        console.log("err", err)
+        console.log("err", err.message)
         res.status(500);
-        res.send({
-            error: err.message
-        });
+        res.json(err.message);
     }
 })
 
@@ -84,9 +76,9 @@ app.post('/landpads', async (req, res) => {
 
         let landpadData = {
             id: landpad.id,
-            fullName: landpad.full_name,
+            full_name: landpad.full_name,
             status: landpad.status,
-            location: landpad.location.name,
+            location: landpad.location,
         }
 
         const result = await store.create(landpadData)
@@ -96,10 +88,9 @@ app.post('/landpads', async (req, res) => {
         res.json(landpadData);
     } 
     catch (err) {
+        console.log("err", err.message)
         res.status(500);
-        res.send({
-            error: err.message
-        });
+        res.json(err.message);
     }
     
 });

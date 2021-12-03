@@ -24,7 +24,7 @@ class SpaceDataStore {
 
     async create (spaceData) {
         const {id, ...spaceItem} = spaceData
-        const spaceItemString = JSON.stringify(spaceItem) 
+        const spaceItemString = JSON.stringify(spaceItem)
 
         try {
             let sql = 'INSERT INTO spaceData (id, spaceItem) VALUES (?, ?)';

@@ -12,7 +12,7 @@
   height: 50%;
   width: 50%;  
   border: 1px solid #222;
-  background: orange;
+  background: #dcdcdc;
   padding: 10px
 }
 
@@ -25,7 +25,7 @@
   width: 100%;
   overflow-y: auto;
   border: 1px solid #222;
-  background: midnightblue;
+  background: #191970;
   color: white;
   padding: 5px 20px;
 }
@@ -84,6 +84,7 @@ pre {
 .landpad-form {
   flex-shrink: 0.5;    
   flex-grow: 0.5;
+  justify-content: space-around;
   padding: 5px; 
 }
 
@@ -91,7 +92,7 @@ pre {
 .landpad-form input[type=text] {
   height: 30px;
   text-align: center;
-  margin: 0 10px 0 0;
+  margin: 0 4px 0 0;
 }
 
 .landpad-form button {
@@ -190,6 +191,8 @@ button {
 
     .landpad-form {
       flex-direction: column;
+      flex-grow: 0.3;
+      justify-content: center;
       padding: 0 5px;
     }
 

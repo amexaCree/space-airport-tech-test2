@@ -4,34 +4,29 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 10px;
+  padding: 10px;
 }
 
 .dashboard {
   position: relative;
-  height: 50vh;
-  width: 50vw;;
-  min-width: 395px;
-  min-height: 230px;
-  
+  height: 50%;
+  width: 50%;  
   border: 1px solid #222;
   background: orange;
   padding: 10px
 }
 
-.dashboard-contents{
-  width: 100%;
+.dashboard-contents {
   height: 100%
 }
 
 .display {
   height: calc( 100% * 2 / 3);
   width: 100%;
-  overflow-y: scroll;
+  overflow-y: auto;
   border: 1px solid #222;
   background: midnightblue;
   color: white;
-  box-sizing: border-box;
   padding: 5px 20px;
 }
 
@@ -46,76 +41,168 @@ pre {
 }
 
 .controls {
-  height: calc( 100% * 1 / 3);
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  box-sizing: border-box;
+  height: calc( 100% / 3);
   padding-top: 10px;
 }
 
-.landpad-form input, .landpad-form button {
-  display: inline-block;
+.controls-container {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  border: 1px solid #666;
 }
 
-input[type=text] {
+.rocket-logo {
+  max-height: 100%;
+  max-width: 100%;
+}
+
+.rocket-logo-wrap {
+  border-left: 1px solid #666;
+  border-right: 1px solid #666;
+  padding: 5px; 
+}
+
+.capsule-btn-wrap {
+  height: 100%;
+  padding: 5px; 
+}
+
+.rocket-logo-wrap, .capsule-btn-wrap .content, .landpad-form {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rocket-logo-wrap, .capsule-btn-wrap {
+  flex-basis: 20%;
+}
+
+.landpad-form {
+  flex-shrink: 0.5;    
+  flex-grow: 0.5;
+  padding: 5px; 
+}
+
+
+.landpad-form input[type=text] {
   height: 30px;
-  margin-right: 10px;
   text-align: center;
+  margin: 0 10px 0 0;
+}
+
+.landpad-form button {
+  flex-shrink: 1
 }
 
 button {
-  padding: 20px 10px;
+  height: 100%;
+  max-height: 50px;
   border-radius: 5px;
   border: 1px solid #666;
   text-align: center;
 }
 
-/* 
+
 @media only screen  
-  and (max-width: 960px) {
-    .dashboard {
-        min-height: 100vh;
-        min-width: 100vw;
+  and (max-width: 500px) {
+    .App {
+      /* display: block; */
+      width: fit-content;
     }
-} */
-
-
-
-/* .App-logo {
-  height: 40vmin;
-  pointer-events: none;
+    .dashboard {
+        width: 500px;
+    }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
- */
-
-/* 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+@media only screen  
+  and (max-height: 230px) {
+    .App {
+      display: block;
+      /* height: auto */
+    }
+    .dashboard {  
+        display: block; 
+        height: 230px;
+        margin: 0 auto;
+    }
 }
 
-.App-link {
-  color: #61dafb;
+
+@media only screen 
+  and (min-device-width: 960px) {
+    .dashboard {
+      min-width: 500px;
+      /* min-width: 395px; */
+      min-height: 230px;
+    }
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-} */
+
+@media only screen  
+  and (max-device-width: 960px) and (max-device-height: 960px) {
+    .App {
+      padding: 0;
+      display: block;
+      width: 100%;
+    }
+    .dashboard {
+        height: 100%;
+        width: 100%;
+    }
+    .dashboard-contents {
+      display: flex;
+      width: 100%;
+    }
+    .display {
+      width: calc( 100% * 2 / 3);
+      height: 100%;
+    }
+    .controls {
+      width: calc( 100% * 1 / 3);
+      height: 100%;
+      padding: 0 0 0 10px;
+    }
+    
+    .controls-container {
+      flex-direction: column;
+    }
+    
+    .rocket-logo-wrap {
+      border-left: none;
+      border-right: none;
+      border-top: 1px solid #666;
+      border-bottom: 1px solid #666;
+      flex-grow: 0.4;
+    }
+
+    .rocket-logo-wrap, .capsule-btn-wrap, .landpad-form {
+      width: 100%;
+      height: auto;
+    }
+
+    .capsule-btn-wrap {
+      padding: 0 5px; 
+    }
+
+    .landpad-form {
+      flex-direction: column;
+      padding: 0 5px;
+    }
+
+    .landpad-form button {
+      margin-top: 10px
+    }
+    
+    .landpad-form input[type=text] {
+      width: 100%;
+      margin: 0;
+    }
+    
+    button {
+      width: 100%;
+    }
+}

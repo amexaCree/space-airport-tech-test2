@@ -1,105 +1,84 @@
-import React, { Component } from "react"
+import React, { useState } from "react"
 import rocket from '../assets/rocket.svg';
 import * as SpacePortAPI from '../utils/SpacePortAPI'
 import prompt from '../utils/prompt'
 
-class Dashboard extends Component {
-    constructor() {
-        super()
-        this.state = {
-            result: "",
-            landPadId: "",
-            isBtnDisabled: false
-        }
-        this.handleClick = this.handleClick.bind(this)
-        this.handleSubmit = this.handleSubmit.bind(this)
-        this.handleChange = this.handleChange.bind(this)
+
+function Dashboard() {
+    const [ result, setResult ] = useState(prompt)
+    const [ landPadId, setLandPadId ] = useState("")
+    const [ isBtnDisabled, setBtnDisabled ] = useState(false)
+
+    function displayLoading() {
+        setResult("Loading...")
     }
 
-    componentDidMount(){
-        this.displayPrompt()
-    }
-
-    displayPrompt() {
-        this.setState({result: prompt})
-    }
-
-    displayLoading() {
-        this.setState({result: "Loading..."})
-    }
-
-    displayResult(data) {
+    function displayResult(data) {
         const resultJSON = JSON.stringify(data, null, 4)
-        // console.log(resultJSON)
-        this.setState({result: resultJSON})
+        setResult(resultJSON)
     }
 
-    checkIdInput(value) {
+    function checkIdInput(value) {
         const disabledBtnInfo = "The following characters not allowed: '#','$','%','&'"
         if( /[#|$|%|&]/.test(value) ) {
-            this.setState({isBtnDisabled: true})
-            this.setState({result: disabledBtnInfo})
+            setBtnDisabled(true)
+            setResult(disabledBtnInfo)
         }
         else {
-            this.setState({isBtnDisabled: false})
-            if (this.state.result === disabledBtnInfo ) {
-                this.displayPrompt()
+            setBtnDisabled(false)
+            if ( result === disabledBtnInfo ) {
+                setResult(prompt)
             }
         }
     }
 
-    handleClick(event) {
+    function handleClick(event) {
         const { className } = event.target
         
         if (className === "rocket-logo") {
-            return this.displayPrompt()
+            return setResult(prompt)
         }
 
-        this.displayLoading()
-        SpacePortAPI.GetCapsules().then((capsules) => {
-            this.displayResult(capsules)
-        })
+        displayLoading()
+        SpacePortAPI.GetCapsules().then(displayResult)
         .catch(err => {
             console.log(err.message)
-            this.displayResult(`Error: ${err.message}`)
+            displayResult(`Error: ${err.message}`)
         })
     }
 
-    handleSubmit(event) {
+    function handleSubmit(event) {
         event.preventDefault()
-        const id = this.state.landPadId
-        this.displayLoading()
-        SpacePortAPI.GetLandPad(id).then((landpad) => {
-            this.displayResult(landpad)
-        })
+        
+        displayLoading()
+        SpacePortAPI.GetLandPad(landPadId).then(displayResult)
         .catch(err => {
             console.log(err.message)
-            this.displayResult(`Error: ${err.message}`)
+            displayResult(`Error: ${err.message}`)
         })
     }
 
-    handleChange(event) {
-        const {name, value} = event.target
-        this.setState({[name]: value})
-        this.checkIdInput(value)
+    function handleChange(event) {
+        const {value} = event.target
+        setLandPadId(value)
+        checkIdInput(value)
     }
-    
-    render() {
-        return (
-            <div className="dashboard">
-                <div className="dashboard-contents">
-                    <div className="display">
-                        <pre>{this.state.result}</pre>
-                    </div>
 
-                    <div className="controls">
-                        <div className="controls-container">
-                            <div className="capsule-btn-wrap">
-                                <div className="content">
-                                    <button 
-                                        className="capsule-btn"
-                                        onClick={this.handleClick}
-                                    >Capsules</button>
+    return (
+        <div className="dashboard">
+            <div className="dashboard-contents">
+                <div className="display">
+                    <pre>{result}</pre>
+                </div>
+
+                <div className="controls">
+                    <div className="controls-container">
+                        <div className="capsule-btn-wrap">
+                            <div className="content">
+                                <button 
+                                    className="capsule-btn"
+                                    onClick={handleClick}
+                                >Capsules</button>
                                 </div>
                             </div>
                             <div className="rocket-logo-wrap">
@@ -107,31 +86,31 @@ class Dashboard extends Component {
                                     src={rocket} 
                                     className="rocket-logo" 
                                     alt="rocket" 
-                                    onClick={this.handleClick}
+                                    onClick={handleClick} 
                                 />
                             </div>
                             <form 
-                                className="landpad-form" 
-                                onSubmit={this.handleSubmit}
-                            >    
-                                <input 
-                                    type="text" 
-                                    placeholder="text"
-                                    name="landPadId"
-                                    size="15" 
-                                    value={this.state.landPadId} 
-                                    onChange={this.handleChange}
-                                />
-                                <button 
-                                    disabled={this.state.isBtnDisabled}
-                                >Landing Pad</button>
-                            </form>
-                        </div>
+                                className="landpad-form"
+                                onSubmit={handleSubmit}
+                            >     
+                            <input 
+                                type="text" 
+                                placeholder="text"
+                                name="landPadId"
+                                size="15" 
+                                value={landPadId} 
+                                onChange={handleChange}
+                            />
+                            <button 
+                                disabled={isBtnDisabled}
+                            >Landing Pad</button>
+                        </form>
                     </div>
                 </div>
             </div>
-        );
-    }
+        </div>
+    );
+    
 }
 
 export default Dashboard;

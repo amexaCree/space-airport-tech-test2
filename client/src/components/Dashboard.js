@@ -71,41 +71,46 @@ class Dashboard extends Component {
     render() {
         return (
             <div className="dashboard">
-
                 <div className="dashboard-contents">
-
                     <div className="display">
                         <pre>{this.state.result}</pre>
                     </div>
 
                     <div className="controls">
-                        <button 
-                            className="capsule-btn"
-                            onClick={this.handleClick}
-                        >Capsules</button>
-
-                        <img 
-                            src={rocket} 
-                            className="rocket-logo" 
-                            alt="rocket" 
-                            onClick={this.handleClick}
-                        />
-
-                        <form 
-                            className="landpad-form" 
-                            onSubmit={this.handleSubmit}
-                        >    
-                            <input 
-                                type="text" 
-                                placeholder="Enter Id..."
-                                name="landPadId"
-                                size="15" 
-                                value={this.state.landPadId} 
-                                onChange={this.handleChange}
-                            />
-
-                            <button>Landing Pad</button>
-                        </form>
+                        <div className="controls-container">
+                            <div className="capsule-btn-wrap">
+                                <div className="content">
+                                    <button 
+                                        className="capsule-btn"
+                                        onClick={this.handleClick}
+                                    >Capsules</button>
+                                </div>
+                            </div>
+                            <div className="rocket-logo-wrap">
+                                <img 
+                                    src={rocket} 
+                                    className="rocket-logo" 
+                                    alt="rocket" 
+                                    onClick={this.handleClick}
+                                />
+                            </div>
+                            <form 
+                                className="landpad-form" 
+                                onSubmit={this.handleSubmit}
+                            >    
+                                <input 
+                                    type="text" 
+                                    placeholder="text"
+                                    name="landPadId"
+                                    size="15" 
+                                    value={this.state.landPadId} 
+                                    onChange={this.handleChange}
+                                />
+                                <button 
+                                    disabled={this.state.isBtnDisabled}
+                                >Landing Pad</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>

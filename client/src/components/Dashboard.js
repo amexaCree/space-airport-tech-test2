@@ -1,7 +1,7 @@
 import React, { useState } from "react"
-import rocket from '../assets/rocket.svg';
 import * as SpacePortAPI from '../utils/SpacePortAPI'
 import prompt from '../utils/prompt'
+import DashBoardView from './DashBoardView'
 
 
 function Dashboard() {
@@ -18,8 +18,8 @@ function Dashboard() {
         setResult(resultJSON)
     }
 
-    function checkIdInput(value) {
-        const disabledBtnInfo = "The following characters not allowed: '#','$','%','&'"
+    function checkBadInput(value) {
+        const disabledBtnInfo = "The following characters are not allowed: '#','$','%','&'"
         if( /[#|$|%|&]/.test(value) ) {
             setBtnDisabled(true)
             setResult(disabledBtnInfo)
@@ -61,55 +61,19 @@ function Dashboard() {
     function handleChange(event) {
         const {value} = event.target
         setLandPadId(value)
-        checkIdInput(value)
+        checkBadInput(value)
     }
 
     return (
-        <div className="dashboard">
-            <div className="dashboard-contents">
-                <div className="display">
-                    <pre>{result}</pre>
-                </div>
-
-                <div className="controls">
-                    <div className="controls-container">
-                        <div className="capsule-btn-wrap">
-                            <div className="content">
-                                <button 
-                                    className="capsule-btn"
-                                    onClick={handleClick}
-                                >Capsules</button>
-                                </div>
-                            </div>
-                            <div className="rocket-logo-wrap">
-                                <img 
-                                    src={rocket} 
-                                    className="rocket-logo" 
-                                    alt="rocket" 
-                                    onClick={handleClick} 
-                                />
-                            </div>
-                            <form 
-                                className="landpad-form"
-                                onSubmit={handleSubmit}
-                            >     
-                            <input 
-                                type="text" 
-                                placeholder="text"
-                                name="landPadId"
-                                size="15" 
-                                value={landPadId} 
-                                onChange={handleChange}
-                            />
-                            <button 
-                                disabled={isBtnDisabled}
-                            >Landing Pad</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
+        <DashBoardView 
+            result={result}
+            isBtnDisabled={isBtnDisabled}
+            landPadId={landPadId}
+            handleClick={handleClick}
+            handleSubmit={handleSubmit}
+            handleChange={handleChange}
+        />
+    )
     
 }
 

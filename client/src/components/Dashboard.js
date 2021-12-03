@@ -8,7 +8,8 @@ class Dashboard extends Component {
         super()
         this.state = {
             result: "",
-            landPadId: ""
+            landPadId: "",
+            isBtnDisabled: false
         }
         this.handleClick = this.handleClick.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
@@ -31,6 +32,20 @@ class Dashboard extends Component {
         const resultJSON = JSON.stringify(data, null, 4)
         // console.log(resultJSON)
         this.setState({result: resultJSON})
+    }
+
+    checkIdInput(value) {
+        const disabledBtnInfo = "The following characters not allowed: '#','$','%','&'"
+        if( /[#|$|%|&]/.test(value) ) {
+            this.setState({isBtnDisabled: true})
+            this.setState({result: disabledBtnInfo})
+        }
+        else {
+            this.setState({isBtnDisabled: false})
+            if (this.state.result === disabledBtnInfo ) {
+                this.displayPrompt()
+            }
+        }
     }
 
     handleClick(event) {
@@ -66,6 +81,7 @@ class Dashboard extends Component {
     handleChange(event) {
         const {name, value} = event.target
         this.setState({[name]: value})
+        this.checkIdInput(value)
     }
     
     render() {

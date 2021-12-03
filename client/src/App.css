@@ -111,7 +111,6 @@ button {
 @media only screen  
   and (max-width: 500px) {
     .App {
-      /* display: block; */
       width: fit-content;
     }
     .dashboard {
@@ -123,7 +122,6 @@ button {
   and (max-height: 230px) {
     .App {
       display: block;
-      /* height: auto */
     }
     .dashboard {  
         display: block; 
@@ -137,7 +135,6 @@ button {
   and (min-device-width: 960px) {
     .dashboard {
       min-width: 500px;
-      /* min-width: 395px; */
       min-height: 230px;
     }
 }

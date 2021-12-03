@@ -40,34 +40,31 @@ app.get('/landpads', async (req, res) => {
     res.json(rows);
 });
 
-app.post('/landpads', async (req, res, next) => {
+const validate = async (req, res, next) => {
     if (!req.body.id) {
         res.status(400).json("Error: Please provide landing pad id.");
     }
     else {
         next()
     }
-})
+}
 
-app.post('/landpads', async (req, res, next) => {
+const dbQuery = async (req, res, next) => {
     try {
         const landpad = await store.show(req.body.id);
         if (!!landpad) {
-            console.log("retreived landpad data from database..")
-            console.log("~", landpad)
             res.json(landpad);
         }
         else {
             next()
         }
     } catch(err) {
-        console.log("err", err.message)
         res.status(500);
         res.json(err.message);
     }
-})
+}
 
-app.post('/landpads', async (req, res) => {
+app.post('/landpads', validate, dbQuery, async (req, res) => {
 
     try {
         const id = req.body.id
@@ -83,12 +80,9 @@ app.post('/landpads', async (req, res) => {
 
         const result = await store.create(landpadData)
         res.status(200);
-        console.log("new landpad data saved..")
-        console.log("~~", landpadData)
         res.json(landpadData);
     } 
     catch (err) {
-        console.log("err", err.message)
         res.status(500);
         res.json(err.message);
     }
